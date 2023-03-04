@@ -43,6 +43,7 @@
         :sortedLessons="sortedLessons"
         :imagesBaseURL="imagesBaseURL"
         :cart="cart"
+        @add-item-to-cart="addItemToCart"
       ></component>
     </main>
   </div>
@@ -66,6 +67,8 @@ export default {
         "https://afterschoolclasses2-env.eba-upgmncnr.eu-west-2.elasticbeanstalk.com/collections/lessons",
       sortBy: "name",
       sortDirection: "asc",
+      searchTerm: "",
+      searchResults: [],
       imagesBaseURL:
         "https://afterschoolclasses2-env.eba-upgmncnr.eu-west-2.elasticbeanstalk.com/",
     };
@@ -172,7 +175,7 @@ export default {
 </script>
 
 <style scoped>
-header {
+/* header {
   line-height: 1.5;
 }
 
@@ -197,5 +200,5 @@ header {
     place-items: flex-start;
     flex-wrap: wrap;
   }
-}
+} */
 </style>

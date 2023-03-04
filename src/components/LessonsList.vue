@@ -28,6 +28,7 @@
       <h1 v-text="lesson.title"></h1>
       <p><b>Location:</b> {{ lesson.location }}</p>
       <p><b>Description:</b> {{ lesson.description }}</p>
+      <p><b>Availability:</b> {{ lesson.availableSpaces }}</p>
       <p><b>Price:</b> {{ lesson.price }}</p>
 
       <button v-on:click="addItemToCart(lesson)" v-if="canAddToCart(lesson)">
@@ -60,6 +61,10 @@ export default {
     return {};
   },
   methods: {
+    addItemToCart: function (lesson) {
+        this.$emit("add-item-to-cart", lesson);
+      //this.cart.push(lesson.id);
+    },
     canAddToCart(lesson) {
       return lesson.availableSpaces > this.cartCount(lesson.id);
     },
@@ -72,6 +77,9 @@ export default {
       }
       return count;
     },
+    classesLeft(lesson) {
+                    return lesson.availableSpaces - this.cartCount(lesson.id);
+                },
   },
 };
 </script>
