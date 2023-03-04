@@ -2,11 +2,7 @@
   <div id="app">
     <header>
       <h1>{{ sitename }}</h1>
-      <button
-        @click="showCheckout"
-        v-bind:disabled="!canCheckout"
-        class="checkout_button2"
-      >
+      <button @click="showCheckout" v-bind:disabled="!canCheckout" class="checkout_button2">
         {{ totalItemsInTheCart }}
         <font-awesome-icon icon="fas fa-shopping-cart" />
         Checkout
@@ -38,14 +34,8 @@
     </header>
 
     <main>
-      <component
-        :is="currentView"
-        :sortedLessons="sortedLessons"
-        :imagesBaseURL="imagesBaseURL"
-        :cart="cart"
-        @add-item-to-cart="addItemToCart"
-        @remove-lesson="removeLesson"
-      ></component>
+      <component :is="currentView" :sortedLessons="sortedLessons" :imagesBaseURL="imagesBaseURL" :cart="cart"
+        @add-item-to-cart="addItemToCart" @remove-lesson="removeLesson"></component>
     </main>
   </div>
 </template>
@@ -79,9 +69,9 @@ export default {
     Checkout,
   },
   created: function () {
-    /* if ("serviceWorker" in navigator) {
+    if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js");
-    } */
+    }
     let webstore = this;
     fetch(this.serverURL).then(function (response) {
       response.json().then(function (json) {
