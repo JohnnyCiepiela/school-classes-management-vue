@@ -1,14 +1,40 @@
-
-
 <template>
   <div id="app">
     <header>
       <h1>{{ sitename }}</h1>
-      <button @click="showCheckout" v-bind:disabled="!canCheckout" class="checkout_button2">
-                {{totalItemsInTheCart}}
-                <font-awesome-icon icon="fas fa-shopping-cart" />
-                Checkout
-            </button>
+      <button
+        @click="showCheckout"
+        v-bind:disabled="!canCheckout"
+        class="checkout_button2"
+      >
+        {{ totalItemsInTheCart }}
+        <font-awesome-icon icon="fas fa-shopping-cart" />
+        Checkout
+      </button>
+      <button v-if="testConsole" @click="toggleShowTestConsole">
+        <font-awesome-icon icon="fas fa-text-height" />
+        Test Console
+      </button>
+      <div v-if="testConsole && showTestConsole" class="test-console">
+        <button @click="saveProductToDB" class="test-elem">
+          <font-awesome-icon icon="fas fa-save" />
+          Test Save a Product to the DB
+        </button>
+        <button @click="deleteAllCaches" class="test-elem">
+          <font-awesome-icon icon="fas fa-trash" />
+          Delete All Caches
+        </button>
+        <button @click="reloadPage" class="test-elem">
+          <font-awesome-icon icon="fas fa-sync" />
+          Reload Page
+        </button>
+        <strong class="test-elem">HTTPS Test: </strong>
+        <a v-bind:href="serverURL" target="_blank">link</a>
+        <button @click="unregisterAllServiceWorkers" class="test-elem">
+          <font-awesome-icon icon="fab fa-uniregistry" />
+          Unregister All ServiceWorkers
+        </button>
+      </div>
     </header>
 
     <main>
@@ -18,40 +44,95 @@
 </template>
 
 <script>
-import LessonsList from './components/LessonsList.vue';
-import Checkout from './components/Checkout.vue';
+import LessonsList from "./components/LessonsList.vue";
+import Checkout from "./components/Checkout.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   data() {
     return {
       sitename: "After School Classes",
       cart: [],
       currentView: LessonsList,
-    }
+      testConsole: true,
+      showTestConsole: true,
+      serverURL: "https://afterschoolclasses2-env.eba-upgmncnr.eu-west-2.elasticbeanstalk.com/collections/lessons",
+
+    };
   },
   components: {
-    LessonsList, Checkout,
+    LessonsList,
+    Checkout,
   },
   methods: {
     showCheckout() {
       if (this.currentView === this.LessonsList) {
         this.currentView === this.Checkout;
-      }
-      else {
+      } else {
         this.currentView === this.LessonsList;
       }
-    }
+    },
+    toggleShowTestConsole() {
+      this.showTestConsole = !this.showTestConsole;
+    },
+    saveProductToDB() {
+      const newProduct = {
+        id: 2000,
+        title: "Math2",
+        location: "Hendon2",
+        description:
+          "Acquisition of new knowledge, skills, and affects that are related to quantity.",
+        price: 100,
+        image: "images/math_icon.png",
+        availableSpaces: 10,
+        rating: 2,
+      };
+
+      fetch(
+        this.serverURL,  
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newProduct),
+        }
+      ).then(function (response) {
+        response.json().then(function (json) {
+          console.log("Success: " + json.ackowledged);
+          webstore.lessons.push(newProduct);
+        });
+      });
+    },
+    deleteAllCaches() {
+      caches.keys().then(function (names) {
+        for (let name of names) caches.delete(name);
+      });
+
+      console.log("All Caches Deleted!");
+    },
+    reloadPage() {
+      window.location.reload();
+    },
+    unregisterAllServiceWorkers() {
+      navigator.serviceWorker.getRegistrations().then(function (registrations) {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+
+      console.log("ServiceWorkers Unregistered");
+    },
   },
   computed: {
-                totalItemsInTheCart: function () {
-                    return this.cart.length || " ";
-                },
-                canCheckout() {
-                    return this.cart.length > 0;
-                },
-              },
-}
+    totalItemsInTheCart: function () {
+      return this.cart.length || " ";
+    },
+    canCheckout() {
+      return this.cart.length > 0;
+    },
+  },
+};
 </script>
 
 <style scoped>
