@@ -44,6 +44,7 @@
         :imagesBaseURL="imagesBaseURL"
         :cart="cart"
         @add-item-to-cart="addItemToCart"
+        @remove-lesson="removeLesson"
       ></component>
     </main>
   </div>
@@ -91,6 +92,16 @@ export default {
   methods: {
     addItemToCart: function (lesson) {
       this.cart.push(lesson.id);
+    },
+    removeLesson(lesson) {
+      this.removeItemFromCart(lesson);
+      if (!this.atLeastOneItemInTheCart) {
+        this.currentView = LessonsList;
+      }
+    },
+    removeItemFromCart(lesson) {
+      let index = this.cart.indexOf(lesson.id);
+      this.cart.splice(index, 1);
     },
     showCheckout() {
       console.log("Hej")
@@ -157,6 +168,9 @@ export default {
     },
   },
   computed: {
+    atLeastOneItemInTheCart() {
+      return this.totalItemsInTheCart >= 1;
+    },
     totalItemsInTheCart: function () {
       return this.cart.length || " ";
     },

@@ -12,14 +12,18 @@
                     <img v-bind:src="imagesBaseURL + lesson.image" width="100px" height="=100px" />
                 </figure>
                 <p><span>Price: </span> {{ " " + lesson.price }}</p>
-                <p>Available items: {{ classesLeft(lesson) }} (<strong>In cart you have added: {{ cartCount(lesson.id) }}</strong>)</p>
+                <p>Available items: {{ classesLeft(lesson) }} (<strong>In cart you have added: {{ cartCount(lesson.id)
+                }}</strong>)</p>
+
+                <button v-on:click="removeLesson(lesson)">Remove one from the cart</button>
 
             </div>
 
         </div>
 
+        <h2>Checkout process:</h2>
         <!--User input validation container-->
-        <p v-if="order.errors.length">
+        <!-- <p v-if="order.errors.length">
             <b>Please consider the following requirements:</b>
         <ul>
             <li v-for="error in order.errors">{{ error }}</li>
@@ -36,7 +40,7 @@
             <input type="text" v-model.trim="order.phone_number">
         </p>
 
-        <button @click="submitCheckoutForm" v-bind:disabled="!canSubmitDetails">Place your order</button>
+        <button @click="submitCheckoutForm" v-bind:disabled="!canSubmitDetails">Place your order</button> -->
     </div>
 </template>
 
@@ -50,6 +54,9 @@ export default {
     methods: {
         atLeastOneItemInTheCart(lesson) {
             return this.cart.includes(lesson.id);
+        },
+        removeLesson(lesson) {
+            this.$emit("remove-lesson", lesson);
         },
         classesLeft(lesson) {
             return lesson.availableSpaces - this.cartCount(lesson.id);
