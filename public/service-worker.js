@@ -1,7 +1,6 @@
-var cacheName = "afterschoolsclasses-v1";
-var cacheFiles = [
+const cacheName = "afterschoolsclasses-v1";
+const cacheFiles = [
     "index.html",
-    //"lessons.js",
     "images/art_icon.png",
     "images/biology_icon.png",
     "images/business_icon.png",
@@ -28,7 +27,7 @@ self.addEventListener("install", function (e) {
 });
 
 self.addEventListener("fetch", function (e) {
-    e.respondwith(
+    e.respondWith(
         caches.match(e.request).then(function (cachedFile) {
             //download the file if it is not in the cache 
             if (cachedFile) {

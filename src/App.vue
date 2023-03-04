@@ -46,6 +46,10 @@ import Checkout from "./components/Checkout.vue";
 
 export default {
   name: "app",
+  components: {
+    LessonsList,
+    Checkout
+  },
   data() {
     return {
       sitename: "After School Classes",
@@ -63,10 +67,6 @@ export default {
       imagesBaseURL:
         "https://afterschoolclasses2-env.eba-upgmncnr.eu-west-2.elasticbeanstalk.com/",
     };
-  },
-  components: {
-    LessonsList,
-    Checkout,
   },
   created: function () {
     if ("serviceWorker" in navigator) {
@@ -95,7 +95,6 @@ export default {
     },
     showCheckout() {
       console.log("Hej")
-      this.currentView = this.Checkout;
       if (this.currentView === this.LessonsList) {
         this.currentView === this.Checkout;
       } else {

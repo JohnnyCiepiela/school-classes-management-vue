@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2> Number of items in the cart: {{ totalItemsInTheCart }}</h2>
+         <h2> Number of items in the cart: {{ totalItemsInTheCart }}</h2>
 
         <div v-for="lesson in sortedLessons" class="inner_lessons">
 
@@ -19,7 +19,7 @@
 
             </div>
 
-        </div>
+        </div> 
 
         <h2>Checkout process:</h2>
         <!--User input validation container-->
@@ -49,7 +49,7 @@ export default {
     name: "Checkout",
     props: ["sortedLessons", "imagesBaseUrl", "cart"],
     data() {
-        return {}
+        return {};
     },
     methods: {
         atLeastOneItemInTheCart(lesson) {
