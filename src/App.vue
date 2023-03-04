@@ -38,7 +38,11 @@
     </header>
 
     <main>
-      <component :is="currentView"></component>
+      <component
+        :is="currentView"
+        :sortedLessons="sortedLessons"
+        :imagesBaseURL="imagesBaseURL"
+      ></component>
     </main>
   </div>
 </template>
@@ -46,6 +50,7 @@
 <script>
 import LessonsList from "./components/LessonsList.vue";
 import Checkout from "./components/Checkout.vue";
+import lessons from "./assets/json/lessons.json";
 
 export default {
   name: "app",
@@ -56,8 +61,13 @@ export default {
       currentView: LessonsList,
       testConsole: true,
       showTestConsole: true,
-      serverURL: "https://afterschoolclasses2-env.eba-upgmncnr.eu-west-2.elasticbeanstalk.com/collections/lessons",
-
+      lessons: lessons,
+      serverURL:
+        "https://afterschoolclasses2-env.eba-upgmncnr.eu-west-2.elasticbeanstalk.com/collections/lessons",
+      sortBy: "name",
+      sortDirection: "asc",
+      imagesBaseURL:
+        "https://afterschoolclasses2-env.eba-upgmncnr.eu-west-2.elasticbeanstalk.com/",
     };
   },
   components: {
@@ -65,6 +75,22 @@ export default {
     Checkout,
   },
   methods: {
+    addItemToCart: function (lesson) {
+      this.cart.push(lesson.id);
+    },
+    canAddToCart(lesson) {
+      return lesson.availableSpaces > this.cartCount(lesson.id);
+    },
+    //Cart count method
+    cartCount(id) {
+      let count = 0;
+      for (let i = 0; i < this.cart.length; i++) {
+        if (this.cart[i] === id) {
+          count++;
+        }
+      }
+      return count;
+    },
     showCheckout() {
       if (this.currentView === this.LessonsList) {
         this.currentView === this.Checkout;
@@ -88,16 +114,13 @@ export default {
         rating: 2,
       };
 
-      fetch(
-        this.serverURL,  
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newProduct),
-        }
-      ).then(function (response) {
+      fetch(this.serverURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newProduct),
+      }).then(function (response) {
         response.json().then(function (json) {
           console.log("Success: " + json.ackowledged);
           webstore.lessons.push(newProduct);
@@ -123,6 +146,12 @@ export default {
 
       console.log("ServiceWorkers Unregistered");
     },
+    sort(s) {
+      if (s === this.sortBy) {
+        this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+      }
+      this.sortBy = s;
+    },
   },
   computed: {
     totalItemsInTheCart: function () {
@@ -130,6 +159,15 @@ export default {
     },
     canCheckout() {
       return this.cart.length > 0;
+    },
+    sortedLessons() {
+      return this.lessons.sort((p1, p2) => {
+        let modifier = 1;
+        if (this.sortDirection === "desc") modifier = -1;
+        if (p1[this.sortBy] < p2[this.sortBy]) return -1 * modifier;
+        if (p1[this.sortBy] > p2[this.sortBy]) return 1 * modifier;
+        return 0;
+      });
     },
   },
 };
