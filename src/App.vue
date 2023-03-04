@@ -4,9 +4,9 @@
   <div id="app">
     <header>
       <h1>{{ sitename }}</h1>
-      <button @click="toggleShowProduct" v-bind:disabled="!canCheckout" class="checkout_button2">
+      <button @click="showCheckout" v-bind:disabled="!canCheckout" class="checkout_button2">
                 {{totalItemsInTheCart}}
-                <span class="fas fa-shopping-cart"></span>
+                <font-awesome-icon icon="fas fa-shopping-cart" />
                 Checkout
             </button>
     </header>
@@ -34,7 +34,7 @@ export default {
     LessonsList, Checkout,
   },
   methods: {
-    toggleShowProduct() {
+    showCheckout() {
       if (this.currentView === this.LessonsList) {
         this.currentView === this.Checkout;
       }
@@ -42,7 +42,15 @@ export default {
         this.currentView === this.LessonsList;
       }
     }
-  }
+  },
+  computed: {
+                totalItemsInTheCart: function () {
+                    return this.cart.length || " ";
+                },
+                canCheckout() {
+                    return this.cart.length > 0;
+                },
+              },
 }
 </script>
 
