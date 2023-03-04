@@ -93,6 +93,8 @@ export default {
       this.cart.push(lesson.id);
     },
     showCheckout() {
+      console.log("Hej")
+      this.currentView = this.Checkout;
       if (this.currentView === this.LessonsList) {
         this.currentView === this.Checkout;
       } else {
