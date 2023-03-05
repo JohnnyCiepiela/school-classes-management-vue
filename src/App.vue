@@ -31,6 +31,21 @@
           Unregister All ServiceWorkers
         </button>
       </div>
+
+      <div class="sort_section">
+            <h2>Sort by:</h2>
+            <ul>
+                <li @click="sort('title')" v-bind:class="[sortBy === 'title' ? sortDirection : '']">
+                    Subject</li>
+                <li @click="sort('location')" v-bind:class="[sortBy === 'location' ? sortDirection : '']">
+                    Location</li>
+                <li @click="sort('price')" v-bind:class="[sortBy === 'price' ? sortDirection : '']">
+                    Price</li>
+                <li @click="sort('availableSpaces')" v-bind:class="[sortBy === 'availableSpaces' ? sortDirection : '']">
+                    Availability</li>
+            </ul>
+        </div>
+
     </header>
 
     <main>
@@ -94,12 +109,11 @@ export default {
       this.cart.splice(index, 1);
     },
     showCheckout() {
-      console.log("Hej")
-      if (this.currentView === this.LessonsList) {
-        this.currentView === this.Checkout;
+        if (this.currentView === LessonsList) {
+        this.currentView = Checkout;
       } else {
-        this.currentView === this.LessonsList;
-      }
+        this.currentView = LessonsList;
+      }  
     },
     toggleShowTestConsole() {
       this.showTestConsole = !this.showTestConsole;
