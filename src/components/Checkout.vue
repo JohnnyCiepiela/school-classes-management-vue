@@ -139,7 +139,6 @@ export default {
                         });
                 }
             });
-
             alert("Thank you for submitting your order!");
         }
 
